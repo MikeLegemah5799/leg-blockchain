@@ -15,6 +15,7 @@ GENESIS_DATA = {
     'nonce': 'genesis_nonce'
 }
 
+
 class Block:
     """
     Block: a unit of storage.
@@ -39,9 +40,15 @@ class Block:
             f'difficulty: {self.difficulty}, '
             f'nonce: {self.nonce}'
         )
-        
+
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
+
+    def to_json(self):
+        """
+        Serialize the block into a dictionary of it's attributes
+        """
+        return self.__dict__
 
     @staticmethod
     def mine_block(last_block, data):
@@ -78,7 +85,7 @@ class Block:
         #     GENESIS_DATA['data']
         # )
 
-        #unpack entrie dictionary arguments from GENESIS_DATA
+        # unpack entrie dictionary arguments from GENESIS_DATA
         return Block(**GENESIS_DATA)
 
     @staticmethod
@@ -108,7 +115,7 @@ class Block:
             raise Exception('The proof of requirement was not met')
         if abs(last_block.difficulty - block.difficulty) > 1:
             raise Exception('The block difficulty must only adjust by 1')
-        
+
         reconstructed_hash = crypto_hash(
             block.timestamp,
             block.last_hash,
@@ -116,9 +123,10 @@ class Block:
             block.nonce,
             block.difficulty
         )
-        
+
         if block.hash != reconstructed_hash:
             raise Exception('The block hash must be correct')
+
 
 def main():
     genesis_block = Block.genesis()
@@ -126,11 +134,12 @@ def main():
     # print(block)
     good_block = Block.mine_block(genesis_block, 'foo')
     # bad_block.last_hash = 'evil_data'
-    
+
     try:
         Block.is_valid_block(genesis_block, good_block)
     except Exception as e:
         print(f'is_valid_block: {e}')
+
 
 if __name__ == '__main__':
     main()
