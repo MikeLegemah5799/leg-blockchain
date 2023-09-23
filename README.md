@@ -19,3 +19,15 @@ python3 -m venv blockchain-env
 ```
 source blockchain-env/bin/activate
 ```
+
+**Run the tests**
+Make sure you have the virtual environment running first.
+```
+python3 -m pytest backend/tests
+```
+
+**Run the application and API**
+Make sure you have the virtual environment running first.
+```
+python3 -m backend.app
+```
