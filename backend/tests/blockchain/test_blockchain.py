@@ -20,7 +20,7 @@ def test_add_block():
 @pytest.fixture
 def blockchain_three_blocks():
     blockchain = Blockchain()
-    for i in range(3):
+    for i in range(3)
         blockchain.add_block(i)
     return blockchain
 
@@ -35,3 +35,10 @@ def test_is_valid_chain_bad_genesis(blockchain_three_blocks):
 
     with pytest.raises(Exception, match='genesis block must be valid'):
         Blockchain.is_valid_chain(blockchain_three_blocks)
+
+
+def test_replace_chain(blockchain_three_blocks):
+    blockchain = Blockchain()
+    blockchain.replace_chain(blockchain_three_blocks.chain)
+
+    assert blockchain.chain == blockchain_three_blocks.chain
