@@ -20,7 +20,7 @@ def test_add_block():
 @pytest.fixture
 def blockchain_three_blocks():
     blockchain = Blockchain()
-    for i in range(3)
+    for i in range(3):
         blockchain.add_block(i)
     return blockchain
 
@@ -43,15 +43,17 @@ def test_replace_chain(blockchain_three_blocks):
 
     assert blockchain.chain == blockchain_three_blocks.chain
 
+
 def test_replace_chain_not_longer():
     blockchain = Blockchain()
-    
+
     with pytest.raises(Exception, match='The incoming chain must be longer'):
         blockchain_three_blocks.replace_chain(blockchain.chain)
-        
+
+
 def test_replace_chain_bad_chain(blockchain_three_blocks):
     blockchain = Blockchain()
     blockchain_three_blocks.chain[1].hash = 'evil hash'
-    
-    with pytest.raises(Exception, match='The incoming chain is invalid')
+
+    with pytest.raises(Exception, match='The incoming chain is invalid'):
         blockchain.replace_chain(blockchain_three_blocks.chain)
