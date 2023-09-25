@@ -3,6 +3,7 @@ import time
 from pubnub.pubnub import PubNub
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.callbacks import SubscribeCallback
+from backend.blockchain.block import Block
 
 pnconfig = PNConfiguration()
 pnconfig.subscribe_key = 'sub-c-be4a94c1-bbcf-4252-b35c-6a614803564d'
@@ -24,7 +25,7 @@ class Listener(SubscribeCallback):
             f'\n-- Channel: {message_object.channel} | Message: {message_object.message}')
 
         if message_object.channel == CHANNELS['BLOCK']:
-            block = message_object.message
+            block = Block.from_json(message_object.message)
             potential_chain = self.blockchain.chain[:]
             potential_chain.append(block)
 
@@ -50,7 +51,10 @@ class PubSub():
         """
         Publish the message object to the channel
         """
+        self.pubnub.unsubscribe().channels([channel]).execute()
+
         self.pubnub.publish().channel(channel).message(message).sync()
+        self.pubnub.subscribe().channels([channel]).execute()
 
     def broadcast_block(self, block):
         """
